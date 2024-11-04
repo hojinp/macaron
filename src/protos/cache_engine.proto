@@ -1,0 +1,113 @@
+syntax = "proto3";
+
+package cacheengine;
+
+// Service definition
+service CacheEngineService {
+    rpc Put(PutRequest) returns (PutResponse) {}
+    rpc Get(GetRequest) returns (GetResponse) {}
+    rpc Delete(DeleteRequest) returns (DeleteResponse) {}
+    rpc Initialize(InitializeRequest) returns (InitializeResponse) {}
+    rpc FlushLog(FlushLogRequest) returns (FlushLogResponse) {}
+    rpc FlushLatencyLog(FlushLatencyLogRequest) returns (FlushLatencyLogResponse) {}
+    rpc ClearDRAMCache(ClearDRAMCacheRequest) returns (ClearDRAMCacheResponse) {}
+    rpc Prefetch(PrefetchRequest) returns (PrefetchResponse) {}
+    rpc Stop(StopRequest) returns (StopResponse) {}
+}
+
+message InitializeRequest {
+    int32 dl_csp = 1;
+    string dl_bucket_name = 2;
+    int32 osc_csp = 3;
+    string osc_bucket_name = 4;
+    string meringue_address = 5;
+    int32 cache_level_mode = 6;
+    int32 packing_mode = 7;
+    int32 log_flush_period = 8;
+    string log_file_path = 9;
+    string local_endpoint_url = 10;
+    string remote_endpoint_url = 11;
+    int64 max_block_size = 12;
+    int32 max_block_object_count = 13;
+    string name = 14;
+    string redis_conf_file_path = 15;
+    bool latency_logging_enabled = 16;
+    bool is_on_prem = 17;
+    string local_region = 18;
+    string remote_region = 19;
+}
+  
+message InitializeResponse {
+    bool is_running = 1;
+}
+
+// Message definitions
+message PutRequest {
+    string key = 1;
+    bytes data = 2;
+}
+
+message PutResponse {
+    bool success = 1;
+}
+
+message GetRequest {
+    string key = 1;
+}
+
+message GetResponse {
+    bool exists = 1;
+    bytes data = 2;
+    int32 src = 3;
+}
+
+message DeleteRequest {
+    string key = 1;
+}
+
+message DeleteResponse {
+    bool success = 1;
+}
+
+message FlushLogRequest {
+    string cache_name = 1;
+    string log_dir_path = 2;
+}
+
+message FlushLogResponse {
+    bool success = 1;
+    int32 osc_put_cnt = 2;
+    int64 dl_get_bytes = 3;
+    int64 dl_put_bytes = 4;
+    int32 file_count = 5;
+}
+
+message FlushLatencyLogRequest {
+    string log_file_path = 1;
+}
+
+message FlushLatencyLogResponse {
+}
+
+message ClearDRAMCacheRequest {
+}
+
+message ClearDRAMCacheResponse {
+}
+
+message PrefetchRequest {
+    bool new_server = 1;
+    string target_address = 2;
+    string cache_engine_addresses = 3;
+    string sort_file_path = 4;
+}
+
+message PrefetchResponse {
+    bool success = 1;
+}
+
+message StopRequest {
+}
+
+message StopResponse {
+}

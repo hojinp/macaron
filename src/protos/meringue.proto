@@ -1,0 +1,101 @@
+syntax = "proto3";
+
+package meringue;
+
+// The Meringue service definition.
+service MeringueService {
+  // Define RPC methods like StartServer, CheckStatus, etc.
+  rpc Initialize(InitializeRequest) returns (InitializeResponse) {}
+  rpc PutSingleMD(PutSingleMDRequest) returns (PutSingleMDResponse) {}
+  rpc GetSingleMD(GetSingleMDRequest) returns (GetSingleMDResponse) {}
+  rpc DeleteSingleMD(DeleteSingleMDRequest) returns (DeleteSingleMDResponse) {}
+  rpc UpdateCache(UpdateCacheRequest) returns (UpdateCacheResponse) {}
+  rpc UpdateSizeAndEvict(EvictionRequest) returns (EvictionResponse) {}
+  rpc RunGC(GCRequest) returns (GCResponse) {}
+  rpc SortAndWrite(SortAndWriteRequest) returns (SortAndWriteResponse) {}
+}
+
+// Define message formats for each method.
+message InitializeRequest {
+  bool contd = 1;
+  int32 packing_mode = 2;
+  string osc_bucket_name = 3;
+  string log_file_path = 4;
+  string meringue_db_path = 5;
+  string local_endpoint_url = 6;
+  double gc_threshold = 7;
+  bool is_on_prem = 8;
+  string local_region = 9;
+}
+
+message InitializeResponse {
+  bool is_running = 1;
+}
+
+message PutSingleMDRequest {
+  string key = 1;
+  int32 size = 2;
+  string block_map = 3;
+}
+
+message PutSingleMDResponse {
+  bool success = 1;
+}
+
+message GetSingleMDRequest {
+  string key = 1;
+}
+
+message GetSingleMDResponse {
+  bool exists = 1;
+  int64 size = 2;
+  int32 offset = 3;
+  string block_id = 4;
+}
+
+message DeleteSingleMDRequest {
+  string key = 1;
+}
+
+message DeleteSingleMDResponse {
+  bool success = 1;
+}
+
+message UpdateCacheRequest {
+  int32 log_file_count = 1;
+}
+
+message UpdateCacheResponse {
+  bool success = 1;
+}
+
+message EvictionRequest {
+  int64 new_size_mb = 1;
+}
+
+message EvictionResponse {
+  bool success = 1;
+  int64 prv_osc_size_bytes = 2;
+  int64 new_osc_size_bytes = 3;
+
+}
+
+message GCRequest {
+}
+
+message GCResponse {
+  bool success = 1;
+  int64 prv_total_data_size_bytes = 2;
+  int64 new_total_data_size_bytes = 3;
+  int32 osc_gc_get_count = 4;
+  int32 osc_gc_put_count = 5;
+}
+
+message SortAndWriteRequest {
+  int64 size_mb = 1;
+  string filename = 2;
+}
+
+message SortAndWriteResponse {
+  bool success = 1;
+}

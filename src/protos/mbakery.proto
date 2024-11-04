@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package mbakery;
+
+// The controller service definition
+service MBakeryService {
+  rpc Connect (ConnectRequest) returns (ConnectResponse) {}
+  rpc OptTrigger (OptTriggerRequest) returns (OptTriggerResponse) {}
+  rpc OptStop (OptStopRequest) returns (OptStopResponse) {}
+}
+
+message OptTriggerRequest {
+}
+
+message OptTriggerResponse {
+  bool success = 1;
+}
+
+message OptStopRequest {
+}
+
+message OptStopResponse {
+  bool success = 1;
+}
+
+// The request message containing the user's name
+message ConnectRequest {
+  string message = 1;
+}
+
+// The response message containing the acknowledgments
+message ConnectResponse {
+  string message = 1;
+}
